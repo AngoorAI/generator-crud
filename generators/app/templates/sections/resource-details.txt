@@ -1,0 +1,13 @@
+import {
+  <%= resourceName %>
+} from "@/types/<%= resourceNameKebabCase %>"
+
+// ----------------------------------------------------------------------
+
+type Props = {
+  <%= resourceNameLowerCamelCase %>: <%= resourceName %>
+}
+
+export default function <%= resourceName %>Details({ <%= resourceNameLowerCamelCase %> }: Props) {
+  return null
+}

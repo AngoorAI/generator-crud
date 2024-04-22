@@ -1,0 +1,18 @@
+"use-client";
+import { <%= resourceName %>EditView } from "@/sections/<%= resourceNameKebabCase %>/view";
+
+export const metadata = {
+  title: "Dashboard: <%= resourceName %> Edit"
+};
+
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default function <%= resourceName %>EditPage({ params }: Props) {
+  const { id } = params;
+
+  return <<%= resourceName %>EditView id={id} />;
+}

@@ -1,0 +1,358 @@
+"use client"
+
+import { memo, useCallback, useEffect, useState } from "react"
+import {
+  Button,
+  Card,
+  Container,
+  IconButton,
+  Stack,
+  Table,
+  TableBody,
+  TableContainer,
+  Tooltip,
+} from "@mui/material"
+import { usePathname, useRouter } from "next/navigation"
+import { paths } from "@/routes/paths"
+import Iconify from "@/minimal/components/iconify"
+import CustomBreadcrumbs from "@/components/custom-breadcrumbs"
+import { useSettingsContext } from "@/minimal/components/settings"
+import {
+  TableEmptyRows,
+  TableHeadCustom,
+  TableNoData,
+  TablePaginationCustom,
+  TableSelectedAction,
+  emptyRows,
+  getComparator,
+  useTable
+} from "@/minimal/components/table"
+import Scrollbar from "@/minimal/components/scrollbar"
+import <%= resourceName %>TableRow from "../<%= resourceNameKebabCase %>-table-row"
+import <%= resourceName %>TableToolbar from "../<%= resourceNameKebabCase %>-table-toolbar"
+import <%= resourceName %>TableFiltersResult from "../<%= resourceNameKebabCase %>-table-filters-result"
+import {
+  <%= resourceName %>TableFilters,
+  <%= resourceName %>TableFilterValue,
+  <%= resourceName %>
+} from "@/types/<%= resourceNameKebabCase %>"
+import { useSnackbar } from "@/minimal/components/snackbar"
+import { useBoolean } from "@/minimal/hooks/use-boolean"
+import { isEqual } from "lodash"
+import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client"
+import { ConfirmDialog } from "@/minimal/components/custom-dialog"
+
+// ----------------------------------------------------------------------
+
+const TABLE_HEAD = [
+  { id: "name", label: "Name" }
+  { id: "", label: "Actions", width: 88 }
+]
+
+const defaultFilters: <%= resourceName %>TableFilters = {
+  name: ""
+}
+
+function <%= resourceName %>ListView() {
+  const [tableData, setTableData] = useState<<%= resourceName %>[]>([])
+
+  useEffect(() => {
+    <%= resourceName %>Client.list()
+      .then((resp) => setTableData(resp.results))
+      .catch((error) => {
+        enqueueSnackbar("Failed to fetch", { variant: "error" })
+        console.error(error)
+      })
+  }, [])
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  const table = useTable()
+
+  const settings = useSettingsContext()
+
+  const router = useRouter()
+
+  const confirm = useBoolean()
+
+  const [filters, setFilters] =
+    useState<<%= resourceName %>TableFilters>(defaultFilters)
+
+  const dataFiltered = applyFilter({
+    inputData: tableData,
+    comparator: getComparator(table.order, table.orderBy),
+    filters
+  })
+
+  const dataInPage = dataFiltered.slice(
+    table.page * table.rowsPerPage,
+    table.page * table.rowsPerPage + table.rowsPerPage
+  )
+
+  const denseHeight = table.dense ? 56 : 56 + 20
+
+  const canReset = !isEqual(defaultFilters, filters)
+
+  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length
+
+  const handleNew = () => {
+    router.push(<%= resourcePath %>.new)
+  }
+
+  const handleFilters = useCallback(
+    (name: string, value: <%= resourceName %>TableFilterValue) => {
+      table.onResetPage()
+      setFilters((prevState) => ({
+        ...prevState,
+        [name]: value
+      }))
+    },
+    [table]
+  )
+
+  const handleResetFilters = useCallback(() => {
+    setFilters(defaultFilters)
+  }, [])
+
+  const handleDeleteRow = useCallback(
+    (id: string) => {
+        <%= resourceName %>Client.delete(id)
+        .then(() => {
+          enqueueSnackbar("Delete success", { variant: "success" })
+          const deleteRow = tableData.filter((row) => row.id !== id)
+          setTableData(deleteRow)
+          table.onUpdatePageDeleteRow(dataInPage.length)
+        })
+        .catch((error) => {
+          enqueueSnackbar("Delete failed", { variant: "error" })
+          console.error("Error deleting row:", error)
+        })
+    },
+    [dataInPage.length, enqueueSnackbar, table, tableData]
+  )
+
+  const handleDeleteRows = useCallback(() => {
+    Promise.all(
+      table.selected.map((id) => <%= resourceName %>Client.delete(id))
+    )
+      .then(() => {
+        const deleteRows = tableData.filter(
+          (row) => !table.selected.includes(row.id)
+        )
+        enqueueSnackbar("Delete success!", { variant: "success" })
+        setTableData(deleteRows)
+        table.onUpdatePageDeleteRows({
+          totalRowsInPage: dataInPage.length,
+          totalRowsFiltered: dataFiltered.length
+        })
+      })
+      .catch((error) => {
+        // Some rows might fail to delete, refetching data
+        <%= resourceName %>Client.list().then((resp) =>
+          setTableData(resp.results)
+        )
+        console.error("Error deleting rows:", error)
+        enqueueSnackbar("Failed to delete rows", { variant: "error" })
+      })
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    enqueueSnackbar,
+    table,
+    tableData
+  ])
+
+  const handleEditRow = useCallback(
+    (id: string) => {
+      router.push(<%= resourcePath %>.edit(id))
+    },
+    [router]
+  )
+
+  const handleViewRow = useCallback(
+    (id: string) => {
+      router.push(<%= resourcePath %>.view(id))
+    },
+    [router]
+  )
+
+  return (
+    <>
+      <Container maxWidth={settings.themeStretch ? false : "lg"}>
+        <CustomBreadcrumbs
+          heading="<%= resourceNameInWords %>"
+          action={
+            <Stack
+              direction="row"
+              gap={1}>
+              <Button
+                size="large"
+                onClick={handleNew}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}>
+                New
+              </Button>
+            </Stack>
+          }
+        />
+
+        <Card>
+          <<%= resourceName %>TableToolbar
+            filters={filters}
+            onFilters={handleFilters}
+          />
+
+          {canReset && (
+            <<%= resourceName %>TableFiltersResult
+              filters={filters}
+              onFilters={handleFilters}
+              onResetFilters={handleResetFilters}
+              results={dataFiltered.length}
+              sx={{ p: 2.5, pt: 0 }}
+            />
+          )}
+
+          <TableContainer sx={{ position: "relative", overflow: "unset" }}>
+            <TableSelectedAction
+              dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={dataFiltered.length}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  dataFiltered.map((row) => row.id)
+                )
+              }
+              action={
+                <Tooltip title="Delete">
+                  <IconButton
+                    color="primary"
+                    onClick={confirm.onTrue}>
+                    <Iconify icon="solar:trash-bin-trash-bold" />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
+
+            <Scrollbar>
+              <Table
+                size={table.dense ? "small" : "medium"}
+                sx={{ minWidth: 960 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={dataFiltered.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                  onSelectAllRows={(checked) =>
+                    table.onSelectAllRows(
+                      checked,
+                      dataFiltered.map((row) => row.id)
+                    )
+                  }
+                />
+
+                <TableBody>
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row) => (
+                      <<%= resourceName %>TableRow
+                        key={row.id}
+                        row={row}
+                        selected={table.selected.includes(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
+                        onSelectRow={() => table.onSelectRow(row.id)}
+                      />
+                    ))}
+
+                  <TableEmptyRows
+                    height={denseHeight}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      dataFiltered.length
+                    )}
+                  />
+
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+
+          <TablePaginationCustom
+            count={dataFiltered.length}
+            page={table.page}
+            rowsPerPage={table.rowsPerPage}
+            onPageChange={table.onChangePage}
+            onRowsPerPageChange={table.onChangeRowsPerPage}
+            dense={table.dense}
+            onChangeDense={table.onChangeDense}
+          />
+        </Card>
+      </Container>
+
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content={
+          <>
+            Are you sure want to delete
+            <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleDeleteRows()
+              confirm.onFalse()
+            }}>
+            Delete
+          </Button>
+        }
+      />
+    </>
+  )
+}
+
+export default memo(<%= resourceName %>ListView)
+
+function applyFilter({
+  inputData,
+  comparator,
+  filters
+}: {
+  inputData: <%= resourceName %>[]
+  comparator: (a: any, b: any) => number
+  filters: <%= resourceName %>TableFilters
+}) {
+  const { name, status } = filters
+
+  const stabilizedThis = inputData.map((el, index) => [el, index] as const)
+
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0])
+    if (order !== 0) return order
+    return a[1] - b[1]
+  })
+
+  inputData = stabilizedThis.map((el) => el[0])
+
+  if (name !== "") {
+    inputData = inputData.filter(
+      (<%= resourceNameSnakeCase %>) =>
+        <%= resourceNameSnakeCase %>.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+    )
+  }
+
+  return inputData
+}

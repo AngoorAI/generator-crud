@@ -1,0 +1,11 @@
+import { <%= resourceName %>CreateView } from "@/sections/<%= resourceNameKebabCase %>/view";
+
+// ----------------------------------------------------------------------
+
+export const metadata = {
+  title: "Dashboard: Create <%= resourceName %>"
+};
+
+export default function <%= resourceName %>CreatePage() {
+  return <<%= resourceName %>CreateView />;
+}

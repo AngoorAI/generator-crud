@@ -1,0 +1,36 @@
+{
+    "name": "generator-angoor-crud",
+    "version": "1.0.0",
+    "description": "Effortlessly generate CRUD views for Next.js apps utilizing Minimal UI Kit and REST API integration. This Yeoman generator simplifies development by scaffolding components, pages, and services.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Saral Hemnani",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/saralhemnani/generator-crud"
+    },
+    "keywords": [
+        "yeoman-generator",
+        "Angoor AI"
+    ],
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/saralhemnani/generator-crud/issues"
+    },
+    "homepage": "https://github.com/saralhemnani/generator-crud",
+    "dependencies": {
+        "lodash": "^4.17.21",
+        "mkdirp": "^3.0.1",
+        "pluralize": "^8.0.0",
+        "yeoman-generator": "^7.1.1"
+    },
+    "type": "module",
+    "devDependencies": {
+        "mocha": "^10.4.0",
+        "yeoman-assert": "^3.1.1",
+        "yeoman-environment": "^4.4.0",
+        "yeoman-test": "^8.2.0"
+    }
+}

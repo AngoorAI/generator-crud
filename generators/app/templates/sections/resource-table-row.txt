@@ -1,0 +1,96 @@
+import TableRow from "@mui/material/TableRow"
+import TableCell from "@mui/material/TableCell"
+import { useBoolean } from "@/minimal/hooks/use-boolean"
+import { Box, Checkbox, IconButton, Stack } from "@mui/material"
+import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>"
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
+
+// ----------------------------------------------------------------------
+
+type Props = {
+  selected: boolean
+  row: <%= resourceName %>
+  onEditRow: VoidFunction
+  onViewRow: VoidFunction
+  onDeleteRow: VoidFunction
+  onSelectRow: VoidFunction
+}
+
+export default function <%= resourceName %>TableRow({
+  row,
+  selected,
+  onViewRow,
+  onEditRow,
+  onDeleteRow,
+  onSelectRow
+}: Props) {
+  const { name } = row
+  const confirm = useBoolean()
+
+  return (
+    <>
+      <TableRow
+        hover
+        selected={selected}>
+        <TableCell padding="checkbox">
+          <Checkbox
+            checked={selected}
+            onClick={onSelectRow}
+          />
+        </TableCell>
+
+        <TableCell sx={{ whiteSpace: "nowrap" }}>
+          <Box
+            onClick={onViewRow}
+            sx={{
+              cursor: "pointer",
+              minWidth: "200px"
+            }}>
+            {name}
+          </Box>
+        </TableCell>
+
+        <TableCell
+          align="right"
+          sx={{ whiteSpace: "nowrap" }}>
+          <Stack
+            direction="row"
+            spacing={1}>
+            <IconButton
+              onClick={onViewRow}
+              size="small">
+              <VisibilityOutlinedIcon />
+            </IconButton>
+            <IconButton
+              onClick={onEditRow}
+              size="small">
+              <EditOutlinedIcon />
+            </IconButton>
+            <IconButton
+              onClick={onDeleteRow}
+              size="small">
+              <DeleteOutlinedIcon />
+            </IconButton>
+          </Stack>
+        </TableCell>
+      </TableRow>
+
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={onDeleteRow}>
+            Delete
+          </Button>
+        }
+      />
+    </>
+  )
+}

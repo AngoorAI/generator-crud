@@ -1,0 +1,10 @@
+export type <%= resourceName %>TableFilterValue = string;
+
+export type <%= resourceName %>TableFilters = {
+    name: string
+};
+
+export type <%= resourceName %> = {
+    id: string
+    name: string
+};

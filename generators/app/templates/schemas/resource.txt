@@ -1,0 +1,8 @@
+import * as Yup from 'yup';
+
+const <%= resourceNameLowerCamelCase %>Schema = Yup.object().shape({
+  id: Yup.string(),
+  name: Yup.string().required("Name is required")
+});
+
+export default <%= resourceNameLowerCamelCase %>Schema;

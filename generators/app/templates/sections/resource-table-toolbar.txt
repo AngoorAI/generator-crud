@@ -1,0 +1,69 @@
+import React, { useCallback } from "react"
+import Stack from "@mui/material/Stack"
+import TextField from "@mui/material/TextField"
+import InputAdornment from "@mui/material/InputAdornment"
+import Iconify from "@/minimal/components/iconify"
+import {
+  <%= resourceName %>TableFilters,
+  <%= resourceName %>TableFilterValue
+} from "@/types/<%= resourceNameKebabCase %>"
+
+// ----------------------------------------------------------------------
+
+type Props = {
+  filters: <%= resourceName %>TableFilters
+  onFilters: (name: string, value: <%= resourceName %>TableFilterValue) => void
+}
+
+export default function <%= resourceName %>TableToolbar({
+  filters,
+  onFilters
+}: Props) {
+    
+  const handleFilterName = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onFilters("name", event.target.value)
+    },
+    [onFilters]
+  )
+
+  return (
+    <>
+      <Stack
+        spacing={2}
+        alignItems={{ xs: "flex-end", md: "center" }}
+        direction={{
+          xs: "column",
+          md: "row"
+        }}
+        sx={{
+          p: 2.5,
+          pr: { xs: 2.5, md: 1 }
+        }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={2}
+          flexGrow={1}
+          sx={{ width: 1 }}>
+          <TextField
+            fullWidth
+            value={filters.name}
+            onChange={handleFilterName}
+            placeholder="Search by name..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify
+                    icon="eva:search-fill"
+                    sx={{ color: "text.disabled" }}
+                  />
+                </InputAdornment>
+              )
+            }}
+          />
+        </Stack>
+      </Stack>
+    </>
+  )
+}

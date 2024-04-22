@@ -1,0 +1,4 @@
+export { default as <%= resourceName %>ListView } from "./<%= resourceNameKebabCase %>-list-view";
+export { default as <%= resourceName %>EditView } from "./<%= resourceNameKebabCase %>-edit-view";
+export { default as <%= resourceName %>CreateView } from "./<%= resourceNameKebabCase %>-create-view";
+export { default as <%= resourceName %>DetailsView } from "./<%= resourceNameKebabCase %>-details-view";

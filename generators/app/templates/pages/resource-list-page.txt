@@ -1,0 +1,12 @@
+"use-client";
+import { <%= resourceName %>ListView } from "@/sections/<%= resourceNameKebabCase %>/view";
+
+// ----------------------------------------------------------------------
+
+export const metadata = {
+  title: "Dashboard: <%= resourceName %> List"
+};
+
+export default function <%= resourceName %>ListPage() {
+  return <<%= resourceName %>ListView />;
+}

@@ -1,0 +1,49 @@
+import { ApiClient } from "./apiClient";
+import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
+import { PaginatedResult } from "@/types/result";
+
+export class <%= resourceName %>Client {
+  public static async get(id: string): Promise<<%= resourceName %>> {
+    return ApiClient.callApi<<%= resourceName %>>({
+      path: `<%= resourceApiPath %>/${id}/`
+    });
+  }
+
+  public static async list(
+    queryParameters?: Object
+  ): Promise<PaginatedResult<<%= resourceName %>>> {
+    return ApiClient.callApi<PaginatedResult<<%= resourceName %>>>({
+      path: "<%= resourceApiPath %>/",
+      queryParameters
+    });
+  }
+
+  public static async create(<%= resourceNameLowerCamelCase %>Data: Partial<<%= resourceName %>>): Promise<<%= resourceName %>> {
+    return ApiClient.callApi<<%= resourceName %>>({
+      path: "<%= resourceApiPath %>/",
+      options: {
+        method: "POST",
+        body: JSON.stringify(<%= resourceNameLowerCamelCase %>Data)
+      }
+    });
+  }
+
+  public static async update(id: string, <%= resourceNameLowerCamelCase %>Data: <%= resourceName %>): Promise<<%= resourceName %>> {
+    return ApiClient.callApi<<%= resourceName %>>({
+      path: `<%= resourceApiPath %>/${id}/`,
+      options: {
+        method: "PUT",
+        body: JSON.stringify(<%= resourceNameLowerCamelCase %>Data)
+      }
+    });
+  }
+
+  public static async delete(id: string): Promise<void> {
+    return ApiClient.callApi<void>({
+      path: `<%= resourceApiPath %>/${id}/`,
+      options: {
+        method: "DELETE"
+      }
+    });
+  }
+}

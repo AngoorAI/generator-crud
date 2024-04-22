@@ -1,0 +1,77 @@
+import React, { useMemo } from "react";
+import { FieldErrors, useForm } from "react-hook-form";
+import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
+import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client";
+import { enqueueSnackbar } from "notistack";
+import FormProvider from "@/minimal/components/hook-form/form-provider";
+import { yupResolver } from "@hookform/resolvers/yup";
+import <%= resourceNameLowerCamelCase %>Schema from "@/schemas/<%= resourceNameLowerCamelCase %>";
+import { paths } from "@/routes/paths";
+import CustomBreadcrumbs from "@/components/custom-breadcrumbs";
+import { FormActions, FormBody } from "./sections";
+
+// ----------------------------------------------------------------------
+
+type Props = {
+  current<%= resourceName %>?: <%= resourceName %>;
+};
+
+export default function <%= resourceName %>NewEditForm({ current<%= resourceName %> }: Props) {
+  const defaultValues = useMemo(() => {
+    return current<%= resourceName %> || { id: "", name: "" };
+  }, [current<%= resourceName %>]);
+
+  const methods = useForm<<%= resourceName %>>({
+    // @ts-ignore
+    resolver: yupResolver<<%= resourceName %>>(<%= resourceNameLowerCamelCase %>Schema),
+    defaultValues,
+    mode: "onTouched",
+  });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit = (data: <%= resourceName %>) => {
+    if (current<%= resourceName %>) {
+      <%= resourceName %>Client.update(current<%= resourceName %>.id, data)
+        .then(() => {
+          enqueueSnackbar("Update Success", { variant: "success" });
+        })
+        .catch((e) => enqueueSnackbar("Update Failed", { variant: "error" }));
+    } else {
+      <%= resourceName %>Client.create(data)
+        .then(() => {
+          enqueueSnackbar("Create Success", { variant: "success" });
+        })
+        .catch((e) => enqueueSnackbar("Create Failed", { variant: "error" }));
+    }
+  };
+
+  const onError = (errors: FieldErrors<<%= resourceName %>>) => {
+    console.log("Form errors", errors);
+    enqueueSnackbar("Please check the form", { variant: "error" });
+  };
+
+  const heading = current<%= resourceName %> ? "Edit <%= resourceName %>" : "Create <%= resourceName %>";
+
+  return (
+    <FormProvider
+      methods={methods}
+      onSubmit={handleSubmit(onSubmit, onError)}>
+      <CustomBreadcrumbs
+        heading={`${heading} <%= resourceName %>`}
+        links={[
+          {
+            name: "All <%= resourceNameInWords %>",
+            href: <%= resourcePath %>.root
+          },
+          {
+            name: `${heading} <%= resourceName %>`,
+            href: current<%= resourceName %> ? <%= resourcePath %>.edit(id) : <%= resourcePath %>.new
+          }
+        ]}
+        action={<FormActions />}
+      />
+      <FormBody />
+    </FormProvider>
+  );
+}

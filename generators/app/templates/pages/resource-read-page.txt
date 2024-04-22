@@ -1,0 +1,19 @@
+import { <%= resourceName %>DetailsView } from "@/sections/<%= resourceNameKebabCase %>/view";
+
+// ----------------------------------------------------------------------
+
+export const metadata = {
+  title: "Dashboard: <%= resourceName %> Details"
+};
+
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default function <%= resourceName %>DetailsPage({ params }: Props) {
+  const { id } = params;
+
+  return <<%= resourceName %>DetailsView id={id} />;
+}

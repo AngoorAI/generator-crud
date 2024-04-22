@@ -1,0 +1,21 @@
+"use client"
+import React from "react"
+import { Card } from "@mui/material"
+
+function FormBody() {
+  return (
+    <Card
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        mb: 5
+      }}>
+
+      // ----------------------------------------------------------------------
+  
+    </Card>
+  )
+}
+
+export default FormBody

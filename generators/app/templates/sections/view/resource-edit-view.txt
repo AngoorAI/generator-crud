@@ -1,0 +1,38 @@
+"use client";
+
+import Container from "@mui/material/Container";
+import { useSettingsContext } from "@/minimal/components/settings";
+import <%= resourceName %>NewEditForm from "../<%= resourceNameKebabCase %>-new-edit-form";
+import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client";
+import { useEffect, useState } from "react";
+import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
+
+// ----------------------------------------------------------------------
+
+type Props = {
+  id: string;
+};
+
+function <%= resourceName %>EditView({ id }: Props) {
+  const settings = useSettingsContext();
+  const [current<%= resourceName %>, setCurrent<%= resourceName %>] =
+    useState<<%= resourceName %>>();
+
+  useEffect(() => {
+   <%= resourceName %>Client.get(id).then((res) =>
+      setCurrent<%= resourceName %>(res)
+    );
+  }, [id]);
+
+  return (
+    <Container maxWidth={settings.themeStretch ? false : "lg"}>
+      {current<%= resourceName %> && (
+        <<%= resourceName %>NewEditForm
+          current<%= resourceName %>={current<%= resourceName %>}
+        />
+      )}
+    </Container>
+  );
+}
+
+export default <%= resourceName %>EditView;
