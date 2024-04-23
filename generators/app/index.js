@@ -133,7 +133,7 @@ export default class extends Generator {
       },
       {
         src: "pages/resource-new-page.txt",
-        dest: `${this.pagesDest}/[id]/new/page.tsx`,
+        dest: `${this.pagesDest}/new/page.tsx`,
       },
       {
         src: "sections/view/index.txt",
