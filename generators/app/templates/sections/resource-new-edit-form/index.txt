@@ -5,7 +5,7 @@ import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamel
 import { enqueueSnackbar } from "notistack";
 import FormProvider from "@/minimal/components/hook-form/form-provider";
 import { yupResolver } from "@hookform/resolvers/yup";
-import <%= resourceNameLowerCamelCase %>Schema from "@/schemas/<%= resourceNameLowerCamelCase %>";
+import <%= resourceNameLowerCamelCase %>Schema from "@/schemas/<%= resourceNameKebabCase %>";
 import { paths } from "@/routes/paths";
 import CustomBreadcrumbs from "@/components/custom-breadcrumbs";
 import { FormActions, FormBody } from "./sections";

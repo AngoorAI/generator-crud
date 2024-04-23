@@ -7,6 +7,7 @@ import { useSettingsContext } from "@/minimal/components/settings";
 import { paths } from "@/minimal/routes/paths";
 import <%= resourceName %>Details from "../<%= resourceNameKebabCase %>-details";
 import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client";
+import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
 
 // ----------------------------------------------------------------------
 
