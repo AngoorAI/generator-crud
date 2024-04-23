@@ -51,7 +51,7 @@ export default function <%= resourceName %>NewEditForm({ current<%= resourceName
     enqueueSnackbar("Please check the form", { variant: "error" });
   };
 
-  const heading = current<%= resourceName %> ? "Edit <%= resourceName %>" : "Create <%= resourceName %>";
+  const heading = current<%= resourceName %> ? "Edit" : "Create";
 
   return (
     <FormProvider
