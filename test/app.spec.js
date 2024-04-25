@@ -10,7 +10,7 @@ describe("generator-minimal-crud", () => {
     await helpers.run(path.join(dirName, "../generators/app")).withPrompts({
       resourceName: "Product",
       resourcePath: "paths.product",
-      resourceApiPath: "product",
+      resourceApiPath: "products",
       projectRoot: `${testProjectRoot}/src`,
       pagesDest: `${testProjectRoot}/src/app/product`,
     });
@@ -35,7 +35,7 @@ describe("generator-minimal-crud", () => {
       `${testProjectRoot}/src/sections/product/product-table-filters-result.tsx`,
       `${testProjectRoot}/src/sections/product/product-table-row.tsx`,
       `${testProjectRoot}/src/sections/product/product-table-toolbar.tsx`,
-      `${testProjectRoot}/src/services/productClient.ts`,
+      `${testProjectRoot}/src/services/product-client.ts`,
       `${testProjectRoot}/src/types/product.ts`,
       `${testProjectRoot}/src/schemas/product.ts`,
     ]);

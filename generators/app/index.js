@@ -188,8 +188,8 @@ export default class extends Generator {
         dest: `${this.sectionsDest}/${this.resourceNameKebabCase}-table-toolbar.tsx`,
       },
       {
-        src: "services/resourceClient.txt",
-        dest: `${this.servicesDest}/${this.resourceNameLowerCamelCase}Client.ts`,
+        src: "services/resource-client.txt",
+        dest: `${this.servicesDest}/${this.resourceNameKebabCase}-client.ts`,
       },
       {
         src: "types/resource.txt",
