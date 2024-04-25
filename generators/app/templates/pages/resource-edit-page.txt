@@ -1,4 +1,3 @@
-"use-client";
 import { <%= resourceName %>EditView } from "@/sections/<%= resourceNameKebabCase %>/view";
 
 export const metadata = {

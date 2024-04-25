@@ -1,4 +1,3 @@
-"use-client";
 import { <%= resourceName %>ListView } from "@/sections/<%= resourceNameKebabCase %>/view";
 
 // ----------------------------------------------------------------------
