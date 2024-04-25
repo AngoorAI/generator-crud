@@ -21,7 +21,7 @@ describe("generator-minimal-crud", () => {
       `${testProjectRoot}/src/app/product/[id]/edit/page.tsx`,
       `${testProjectRoot}/src/app/product/page.tsx`,
       `${testProjectRoot}/src/app/product/[id]/page.tsx`,
-      `${testProjectRoot}/src/app/product/[id]/new/page.tsx`,
+      `${testProjectRoot}/src/app/product/new/page.tsx`,
       `${testProjectRoot}/src/sections/product/view/index.ts`,
       `${testProjectRoot}/src/sections/product/view/product-create-view.tsx`,
       `${testProjectRoot}/src/sections/product/view/product-details-view.tsx`,
