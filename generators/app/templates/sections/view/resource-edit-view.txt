@@ -3,7 +3,7 @@
 import Container from "@mui/material/Container";
 import { useSettingsContext } from "@/minimal/components/settings";
 import <%= resourceName %>NewEditForm from "../<%= resourceNameKebabCase %>-new-edit-form";
-import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client";
+import { <%= resourceName %>Client } from "@/services/<%= resourceNameKebabCase %>-client";
 import { useEffect, useState } from "react";
 import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
 

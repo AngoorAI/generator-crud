@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
-import CustomBreadcrumbs from "@/components/custom-breadcrumbs";
+import CustomBreadcrumbs from "@/minimal/components/custom-breadcrumbs";
 import { useSettingsContext } from "@/minimal/components/settings";
 import { paths } from "@/minimal/routes/paths";
 import <%= resourceName %>Details from "../<%= resourceNameKebabCase %>-details";
-import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client";
+import { <%= resourceName %>Client } from "@/services/<%= resourceNameKebabCase %>-client";
 import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
 
 // ----------------------------------------------------------------------

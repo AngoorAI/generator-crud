@@ -15,7 +15,7 @@ import {
 import { usePathname, useRouter } from "next/navigation"
 import { paths } from "@/routes/paths"
 import Iconify from "@/minimal/components/iconify"
-import CustomBreadcrumbs from "@/components/custom-breadcrumbs"
+import CustomBreadcrumbs from "@/minimal/components/custom-breadcrumbs"
 import { useSettingsContext } from "@/minimal/components/settings"
 import {
   TableEmptyRows,
@@ -39,7 +39,7 @@ import {
 import { useSnackbar } from "@/minimal/components/snackbar"
 import { useBoolean } from "@/minimal/hooks/use-boolean"
 import { isEqual } from "lodash"
-import { <%= resourceName %>Client } from "@/services/<%= resourceNameLowerCamelCase %>Client"
+import { <%= resourceName %>Client } from "@/services/<%= resourceNameKebabCase %>-client"
 import { ConfirmDialog } from "@/minimal/components/custom-dialog"
 
 // ----------------------------------------------------------------------
