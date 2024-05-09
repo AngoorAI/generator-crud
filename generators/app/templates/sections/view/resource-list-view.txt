@@ -45,7 +45,7 @@ import { ConfirmDialog } from "@/minimal/components/custom-dialog"
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Name" }
+  { id: "name", label: "Name" },
   { id: "", label: "Actions", width: 88 }
 ]
 
@@ -181,6 +181,7 @@ function <%= resourceName %>ListView() {
       <Container maxWidth={settings.themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
           heading="<%= resourceNameInWords %>"
+          links={[]}
           action={
             <Stack
               direction="row"
