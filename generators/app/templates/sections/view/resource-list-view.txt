@@ -336,7 +336,7 @@ function applyFilter({
   comparator: (a: any, b: any) => number
   filters: <%= resourceName %>TableFilters
 }) {
-  const { name, status } = filters
+  const { name } = filters
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const)
 
