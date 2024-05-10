@@ -9,6 +9,7 @@ import <%= resourceNameLowerCamelCase %>Schema from "@/schemas/<%= resourceNameK
 import { paths } from "@/routes/paths";
 import CustomBreadcrumbs from "@/minimal/components/custom-breadcrumbs";
 import { FormActions, FormBody } from "./sections";
+import { useRouter } from "next/navigation"
 
 // ----------------------------------------------------------------------
 
@@ -30,19 +31,24 @@ export default function <%= resourceName %>NewEditForm({ current<%= resourceName
 
   const { handleSubmit } = methods;
 
-  const onSubmit = (data: <%= resourceName %>) => {
-    if (current<%= resourceName %>) {
-      <%= resourceName %>Client.update(current<%= resourceName %>.id, data)
-        .then(() => {
-          enqueueSnackbar("Update Success", { variant: "success" });
-        })
-        .catch((e) => enqueueSnackbar("Update Failed", { variant: "error" }));
-    } else {
-      <%= resourceName %>Client.create(data)
-        .then(() => {
-          enqueueSnackbar("Create Success", { variant: "success" });
-        })
-        .catch((e) => enqueueSnackbar("Create Failed", { variant: "error" }));
+  const { router } = useRouter()
+  
+  const onSubmit = async (data: <%= resourceName %>) => {
+    try {
+      if (current<%= resourceName %>) {
+        await <%= resourceName %>Client.update(current<%= resourceName %>.id, data)
+        enqueueSnackbar("Update Success", { variant: "success" })
+      } else {
+        await <%= resourceName %>Client.create(data)
+        enqueueSnackbar("Create Success", { variant: "success" })
+      }
+
+      router.push(<%= resourcePath %>.root)
+    } catch (error) {
+      const errorMessage = current<%= resourceName %>
+        ? "Update Failed"
+        : "Create Failed"
+      enqueueSnackbar(errorMessage, { variant: "error" })
     }
   };
 

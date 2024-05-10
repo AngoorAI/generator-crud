@@ -9,7 +9,7 @@ import {
   <%= resourceName %>,
   <%= resourceName %>TableFilters,
   <%= resourceName %>TableFilterValue
-} from "@/types/<%= resourceNameSnakeCase %>"
+} from "@/types/<%= resourceNameKebabCase %>"
 
 // ----------------------------------------------------------------------
 

@@ -152,7 +152,7 @@ function <%= resourceName %>ListView() {
           setTableData(resp.results)
         )
         console.error("Error deleting rows:", error)
-        enqueueSnackbar("Failed to delete rows", { variant: "error" })
+        enqueueSnackbar("Failed to delete some rows", { variant: "error" })
       })
   }, [
     dataFiltered.length,
