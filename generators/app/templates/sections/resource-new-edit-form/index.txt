@@ -31,7 +31,7 @@ export default function <%= resourceName %>NewEditForm({ current<%= resourceName
 
   const { handleSubmit } = methods;
 
-  const { router } = useRouter()
+  const router = useRouter()
 
   const onSubmit = async (data: <%= resourceName %>) => {
     try {
