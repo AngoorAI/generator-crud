@@ -1,11 +1,12 @@
 import TableRow from "@mui/material/TableRow"
 import TableCell from "@mui/material/TableCell"
 import { useBoolean } from "@/minimal/hooks/use-boolean"
-import { Box, Checkbox, IconButton, Stack } from "@mui/material"
+import { Box, Checkbox, IconButton, Stack, Button } from "@mui/material"
 import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>"
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
+import { ConfirmDialog } from "@/minimal/components/custom-dialog"
 
 // ----------------------------------------------------------------------
 

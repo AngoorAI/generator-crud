@@ -32,7 +32,7 @@ export default function <%= resourceName %>NewEditForm({ current<%= resourceName
   const { handleSubmit } = methods;
 
   const { router } = useRouter()
-  
+
   const onSubmit = async (data: <%= resourceName %>) => {
     try {
       if (current<%= resourceName %>) {
@@ -72,7 +72,7 @@ export default function <%= resourceName %>NewEditForm({ current<%= resourceName
           },
           {
             name: `${heading} <%= resourceName %>`,
-            href: current<%= resourceName %> ? <%= resourcePath %>.edit(id) : <%= resourcePath %>.new
+            href: current<%= resourceName %> ? <%= resourcePath %>.edit(current<%= resourceName %>.id) : <%= resourcePath %>.new
           }
         ]}
         action={<FormActions />}
