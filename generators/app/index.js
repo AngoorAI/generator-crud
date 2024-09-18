@@ -176,16 +176,8 @@ export default class extends Generator {
         dest: `${this.sectionsDest}/${this.resourceNameKebabCase}-new-edit-form/sections/index.ts`,
       },
       {
-        src: "sections/resource-table-filters-result.txt",
-        dest: `${this.sectionsDest}/${this.resourceNameKebabCase}-table-filters-result.tsx`,
-      },
-      {
         src: "sections/resource-table-row.txt",
         dest: `${this.sectionsDest}/${this.resourceNameKebabCase}-table-row.tsx`,
-      },
-      {
-        src: "sections/resource-table-toolbar.txt",
-        dest: `${this.sectionsDest}/${this.resourceNameKebabCase}-table-toolbar.tsx`,
       },
       {
         src: "services/resource-client.txt",

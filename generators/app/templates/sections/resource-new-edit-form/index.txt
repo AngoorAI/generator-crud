@@ -62,7 +62,8 @@ export default function <%= resourceName %>NewEditForm({ current<%= resourceName
   return (
     <FormProvider
       methods={methods}
-      onSubmit={handleSubmit(onSubmit, onError)}>
+      onSubmit={handleSubmit(onSubmit, onError)}
+      isEditMode={!!current<%= resourceName %>}>
       <CustomBreadcrumbs
         heading={`${heading} <%= resourceName %>`}
         links={[

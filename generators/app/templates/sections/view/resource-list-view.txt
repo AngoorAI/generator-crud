@@ -12,7 +12,7 @@ import {
   TableContainer,
   Tooltip,
 } from "@mui/material"
-import { usePathname, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { paths } from "@/routes/paths"
 import Iconify from "@/minimal/components/iconify"
 import CustomBreadcrumbs from "@/minimal/components/custom-breadcrumbs"
@@ -24,22 +24,17 @@ import {
   TablePaginationCustom,
   TableSelectedAction,
   emptyRows,
-  getComparator,
   useTable
 } from "@/minimal/components/table"
 import Scrollbar from "@/minimal/components/scrollbar"
 import <%= resourceName %>TableRow from "../<%= resourceNameKebabCase %>-table-row"
-import <%= resourceName %>TableToolbar from "../<%= resourceNameKebabCase %>-table-toolbar"
-import <%= resourceName %>TableFiltersResult from "../<%= resourceNameKebabCase %>-table-filters-result"
-import {
-  <%= resourceName %>TableFilters,
-  <%= resourceName %>TableFilterValue,
-  <%= resourceName %>
-} from "@/types/<%= resourceNameKebabCase %>"
+import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>"
+import DynamicChipFilter from "@/components/dynamic-filter-chip"
+import { DataType, FilterConfig, FilterType } from "@/types/dynamic-filter-chip"
 import { useSnackbar } from "@/minimal/components/snackbar"
 import { useBoolean } from "@/minimal/hooks/use-boolean"
-import { isEqual } from "lodash"
 import { <%= resourceName %>Client } from "@/services/<%= resourceNameKebabCase %>-client"
+import { SyncButton } from "@/components/common"
 import { ConfirmDialog } from "@/minimal/components/custom-dialog"
 
 // ----------------------------------------------------------------------
@@ -49,16 +44,29 @@ const TABLE_HEAD = [
   { id: "", label: "Actions", width: 88 }
 ]
 
-const defaultFilters: <%= resourceName %>TableFilters = {
-  name: ""
+const FILTER_CONFIG: FilterConfig<<%= resourceName %>> = {
+  filters: [
+    {
+      name: "name",
+      label: "Search by name...",
+      dataType: DataType.STRING,
+      filterType: FilterType.SEARCHBAR
+    }
+  ],
+  defaultFilters: ["name"]
 }
 
 function <%= resourceName %>ListView() {
+  const [isSyncing, setIsSyncing] = useState<boolean>(false)
   const [tableData, setTableData] = useState<<%= resourceName %>[]>([])
+  const [dataFiltered, setDataFiltered] = useState<<%= resourceName %>[]>([])
 
   useEffect(() => {
     <%= resourceName %>Client.list()
-      .then((resp) => setTableData(resp.results))
+      .then((resp) => {
+        setTableData(resp.results)
+        setDataFiltered(resp.results)
+      })
       .catch((error) => {
         enqueueSnackbar("Failed to fetch", { variant: "error" })
         console.error(error)
@@ -75,15 +83,6 @@ function <%= resourceName %>ListView() {
 
   const confirm = useBoolean()
 
-  const [filters, setFilters] =
-    useState<<%= resourceName %>TableFilters>(defaultFilters)
-
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters
-  })
-
   const dataInPage = dataFiltered.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
@@ -91,28 +90,11 @@ function <%= resourceName %>ListView() {
 
   const denseHeight = table.dense ? 56 : 56 + 20
 
-  const canReset = !isEqual(defaultFilters, filters)
-
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length
+  const notFound = !dataFiltered.length
 
   const handleNew = () => {
     router.push(<%= resourcePath %>.new)
   }
-
-  const handleFilters = useCallback(
-    (name: string, value: <%= resourceName %>TableFilterValue) => {
-      table.onResetPage()
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value
-      }))
-    },
-    [table]
-  )
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters)
-  }, [])
 
   const handleDeleteRow = useCallback(
     (id: string) => {
@@ -176,6 +158,14 @@ function <%= resourceName %>ListView() {
     [router]
   )
 
+  const handleSync = useCallback(() => {
+    setIsSyncing(true)
+    setTimeout(() => {
+      router.refresh()
+      setIsSyncing(false)
+    }, 1000)
+  }, [router])
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : "lg"}>
@@ -186,6 +176,10 @@ function <%= resourceName %>ListView() {
             <Stack
               direction="row"
               gap={1}>
+              <SyncButton
+                isSyncing={isSyncing}
+                onClick={handleSync}
+              />
               <Button
                 size="large"
                 onClick={handleNew}
@@ -198,20 +192,11 @@ function <%= resourceName %>ListView() {
         />
 
         <Card>
-          <<%= resourceName %>TableToolbar
-            filters={filters}
-            onFilters={handleFilters}
+          <DynamicChipFilter<<%= resourceName %>>
+            data={tableData}
+            config={FILTER_CONFIG}
+            onChange={setDataFiltered}
           />
-
-          {canReset && (
-            <<%= resourceName %>TableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              onResetFilters={handleResetFilters}
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
 
           <TableContainer sx={{ position: "relative", overflow: "unset" }}>
             <TableSelectedAction
@@ -326,34 +311,3 @@ function <%= resourceName %>ListView() {
 }
 
 export default memo(<%= resourceName %>ListView)
-
-function applyFilter({
-  inputData,
-  comparator,
-  filters
-}: {
-  inputData: <%= resourceName %>[]
-  comparator: (a: any, b: any) => number
-  filters: <%= resourceName %>TableFilters
-}) {
-  const { name } = filters
-
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const)
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0])
-    if (order !== 0) return order
-    return a[1] - b[1]
-  })
-
-  inputData = stabilizedThis.map((el) => el[0])
-
-  if (name !== "") {
-    inputData = inputData.filter(
-      (<%= resourceNameSnakeCase %>) =>
-        <%= resourceNameSnakeCase %>.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-    )
-  }
-
-  return inputData
-}

@@ -1,11 +1,5 @@
 import { BaseModel } from "./base-model"
 
-export type <%= resourceName %>TableFilterValue = string;
-
-export type <%= resourceName %>TableFilters = {
-    name: string
-};
-
 export type <%= resourceName %> = BaseModel & {
     id: string
     name: string

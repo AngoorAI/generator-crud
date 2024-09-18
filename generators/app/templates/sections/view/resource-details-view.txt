@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import CustomBreadcrumbs from "@/minimal/components/custom-breadcrumbs";
 import { useSettingsContext } from "@/minimal/components/settings";
-import { paths } from "@/minimal/routes/paths";
+import { paths } from "@/routes/paths";
 import <%= resourceName %>Details from "../<%= resourceNameKebabCase %>-details";
 import { <%= resourceName %>Client } from "@/services/<%= resourceNameKebabCase %>-client";
 import { <%= resourceName %> } from "@/types/<%= resourceNameKebabCase %>";
@@ -33,11 +33,11 @@ export default function <%= resourceName %>DetailsView({ id }: Props) {
         links={[
           {
             name: "All <%= resourceNameInWords %>",
-            href: "<%= resourcePath %>.root"
+            href: <%= resourcePath %>.root
           },
           {
             name: "View <%= resourceName %>",
-            href: "<%= resourcePath %>.view(id)"
+            href: <%= resourcePath %>.view(id)
           }
         ]}
       />
